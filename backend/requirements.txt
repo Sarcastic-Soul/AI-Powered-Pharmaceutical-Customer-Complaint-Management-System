@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+sqlalchemy
+pydantic
+langgraph
+langchain-groq
+langchain-core
+python-dotenv
+pypdf
+scikit-learn
+numpy
+jinja2
+python-multipart
+psycopg2-binary
