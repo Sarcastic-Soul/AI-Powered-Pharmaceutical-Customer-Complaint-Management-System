@@ -15,7 +15,7 @@ class Settings:
     API_V1_STR: str = "/api"
     DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./qms_complaints.db")
     GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
-    PRIMARY_MODEL: str = os.getenv("PRIMARY_MODEL", "gemma2-9b-it")
+    PRIMARY_MODEL: str = os.getenv("PRIMARY_MODEL", "llama-3.3-70b-versatile")
     COMPLEX_MODEL: str = os.getenv("COMPLEX_MODEL", "llama-3.3-70b-versatile")
 
 settings = Settings()

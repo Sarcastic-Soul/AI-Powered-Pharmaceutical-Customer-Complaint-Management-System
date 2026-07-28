@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { getApiUrl } from '../apiConfig';
 
 const DEFAULT_FORM = {
   customer_name: '',
@@ -25,7 +26,7 @@ const DEFAULT_FORM = {
 export const fetchComplaints = createAsyncThunk(
   'complaint/fetchComplaints',
   async () => {
-    const res = await fetch('/api/complaints');
+    const res = await fetch(getApiUrl('/api/complaints'));
     return await res.json();
   }
 );
@@ -33,7 +34,7 @@ export const fetchComplaints = createAsyncThunk(
 export const extractFieldsFromText = createAsyncThunk(
   'complaint/extractFieldsFromText',
   async ({ text, groqApiKey }) => {
-    const res = await fetch('/api/ai/extract', {
+    const res = await fetch(getApiUrl('/api/ai/extract'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text, groq_api_key: groqApiKey })
@@ -47,7 +48,7 @@ export const uploadAndExtractFile = createAsyncThunk(
   async ({ file }) => {
     const formData = new FormData();
     formData.append('file', file);
-    const res = await fetch('/api/ai/extract-file', {
+    const res = await fetch(getApiUrl('/api/ai/extract-file'), {
       method: 'POST',
       body: formData
     });
@@ -58,7 +59,7 @@ export const uploadAndExtractFile = createAsyncThunk(
 export const sendNLChatMessage = createAsyncThunk(
   'complaint/sendNLChatMessage',
   async ({ message, currentForm, groqApiKey }) => {
-    const res = await fetch('/api/ai/chat-edit', {
+    const res = await fetch(getApiUrl('/api/ai/chat-edit'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -74,7 +75,7 @@ export const sendNLChatMessage = createAsyncThunk(
 export const runFullQMSAnalysis = createAsyncThunk(
   'complaint/runFullQMSAnalysis',
   async ({ form, groqApiKey }) => {
-    const res = await fetch('/api/ai/analyze', {
+    const res = await fetch(getApiUrl('/api/ai/analyze'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -89,7 +90,7 @@ export const runFullQMSAnalysis = createAsyncThunk(
 export const saveComplaintToDb = createAsyncThunk(
   'complaint/saveComplaintToDb',
   async (formData) => {
-    const res = await fetch('/api/complaints', {
+    const res = await fetch(getApiUrl('/api/complaints'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData)
@@ -162,7 +163,7 @@ const complaintSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchComplaints.fulfilled, (state, action) => {
-        state.savedComplaints = action.payload;
+        state.savedComplaints = Array.isArray(action.payload) ? action.payload : [];
       })
       .addCase(extractFieldsFromText.pending, (state) => {
         state.isExtracting = true;
@@ -251,8 +252,10 @@ const complaintSlice = createSlice({
       })
       .addCase(saveComplaintToDb.fulfilled, (state, action) => {
         state.isSaving = false;
-        state.savedComplaints.unshift(action.payload);
-        state.statusMessage = `Complaint ${action.payload.complaint_number} registered in QMS database successfully!`;
+        if (action.payload && action.payload.id) {
+          state.savedComplaints.unshift(action.payload);
+          state.statusMessage = `Complaint ${action.payload.complaint_number} registered in QMS database successfully!`;
+        }
       })
       .addCase(saveComplaintToDb.rejected, (state) => {
         state.isSaving = false;

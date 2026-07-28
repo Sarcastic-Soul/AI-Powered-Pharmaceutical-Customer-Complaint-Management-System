@@ -2,14 +2,14 @@
 
 An enterprise-grade Quality Management System (QMS) Customer Complaint Module designed for pharmaceutical manufacturers producing **API (Active Pharmaceutical Ingredients)** and **FDF (Finished Dosage Forms)**.
 
-Built with **React**, **Redux Toolkit**, **FastAPI**, **LangGraph**, **Groq LLMs** (`gemma2-9b-it` & `llama-3.3-70b-versatile`), and **Neon PostgreSQL**.
+Built with **React**, **Redux Toolkit**, **FastAPI**, **LangGraph**, **Groq LLMs** (`llama-3.3-70b-versatile`), and **Neon PostgreSQL**.
 
 ---
 
 ## 🌟 Core System Capabilities
 
 ### 1. Document & Log Auto-Extraction
-- **Gemma2 (`gemma2-9b-it`) Extraction Agent**: Ingests unstructured customer emails, Certificates of Analysis (COAs), lab logs, or PDF complaint letters and extracts exact structured QMS fields directly into the registration form.
+- **Llama 3.3 (`llama-3.3-70b-versatile`) Extraction Agent**: Ingests unstructured customer emails, Certificates of Analysis (COAs), lab logs, or PDF complaint letters and extracts exact structured QMS fields directly into the registration form.
 - Direct support for PDF, plain text, and `.log` file parsing via `python-multipart` and `pypdf`.
 
 ### 2. Natural Language Form Editing Assistant (Side-Drawer Chat)
@@ -49,7 +49,7 @@ Built with **React**, **Redux Toolkit**, **FastAPI**, **LangGraph**, **Groq LLMs
 | **Frontend** | React (Vite), Redux Toolkit, Lucide Icons, Tailwind CSS, Google Inter Font |
 | **Backend** | Python 3.12, FastAPI, SQLAlchemy ORM, Uvicorn |
 | **Agentic Framework** | LangGraph StateGraph |
-| **LLMs Provider** | Groq API (`gemma2-9b-it` & `llama-3.3-70b-versatile`) |
+| **LLMs Provider** | Groq API (`llama-3.3-70b-versatile`) |
 | **Database** | PostgreSQL (NeonDB) with SQLite local fallback |
 
 ---
@@ -63,7 +63,7 @@ Add your credentials to `.env` in the root or `backend/.env`:
 ```env
 GROQ_API_KEY=gsk_your_groq_api_key_here
 DATABASE_URL=postgresql://neondb_owner:***@ep-cool-db.neon.tech/neondb?sslmode=require
-PRIMARY_MODEL=gemma2-9b-it
+PRIMARY_MODEL=llama-3.3-70b-versatile
 COMPLEX_MODEL=llama-3.3-70b-versatile
 ```
 

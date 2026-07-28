@@ -6,6 +6,7 @@ import {
   setRawLogText,
   runFullQMSAnalysis
 } from '../store/complaintSlice';
+import { getApiUrl } from '../apiConfig';
 import { Sparkles, Loader2 } from 'lucide-react';
 
 export default function DocumentUploader() {
@@ -16,9 +17,9 @@ export default function DocumentUploader() {
   const [activePresetId, setActivePresetId] = useState('');
 
   useEffect(() => {
-    fetch('/api/presets')
+    fetch(getApiUrl('/api/presets'))
       .then((res) => res.json())
-      .then((data) => setPresets(data))
+      .then((data) => setPresets(Array.isArray(data) ? data : []))
       .catch((err) => console.error('Presets error:', err));
   }, []);
 

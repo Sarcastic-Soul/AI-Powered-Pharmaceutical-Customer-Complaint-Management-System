@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { ShieldCheck, UserCheck, Bot, Clock, Search, Filter } from 'lucide-react';
+import { getApiUrl } from '../apiConfig';
+import { ShieldCheck, UserCheck, Bot } from 'lucide-react';
 
 export default function AuditTrailView() {
   const [logs, setLogs] = useState([]);
@@ -7,20 +8,18 @@ export default function AuditTrailView() {
   const [filterActor, setFilterActor] = useState('ALL');
 
   useEffect(() => {
-    // Fetch audit trail for complaint #1 or general complaints audit
-    fetch('/api/complaints/1/audit-trail')
+    fetch(getApiUrl('/api/complaints/1/audit-trail'))
       .then((res) => res.json())
       .then((data) => {
-        setLogs(data);
+        setLogs(Array.isArray(data) ? data : []);
         setLoading(false);
       })
       .catch(() => {
-        // Fallback demo audit data
         setLogs([
           {
             id: 1,
             action: "Complaint Form Fields Auto-Extracted",
-            actor: "AI Agent (gemma2-9b-it)",
+            actor: "AI Agent (Llama 3.3)",
             changes_json: '{"product_name": "Paracetamol API", "severity_level": "Critical"}',
             timestamp: new Date().toISOString()
           },
@@ -34,7 +33,7 @@ export default function AuditTrailView() {
           {
             id: 3,
             action: "5-Whys Root Cause Analysis Generated",
-            actor: "AI Agent (llama-3.3-70b)",
+            actor: "AI Agent (Llama 3.3)",
             changes_json: '{"rca_status": "Complete"}',
             timestamp: new Date().toISOString()
           }
